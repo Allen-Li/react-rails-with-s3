@@ -1,0 +1,28 @@
+default: &default
+  adapter: postgresql
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: nde_admin_tool_development
+
+test:
+  <<: *default
+  database: test
+
+production:
+  adapter: postgresql
+  database: nde_admin_tool_production
+  host: <%= ENV['DB_HOST'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  pool: 5432
+
+qa:
+  adapter: postgresql
+  database: nde_admin_tool_qa
+  host: <%= ENV['DB_HOST']%>
+  username: <%= ENV['DB_USERNAME']%>
+  password: <%= ENV['DB_PASSWORD']%>
+  pool: 5432
