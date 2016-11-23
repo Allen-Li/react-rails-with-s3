@@ -1,0 +1,13 @@
+%header
+  %h1.header
+    = yield(:header_text)
+  %nav.navbar.navbar-light
+    %ul.nav.navbar-nav
+      %li
+        %a{href: emails_path } List Emails
+      %li
+        %a{href: new_email_path } Create New Email
+      %li
+        %a{href: templates_path } List Templates
+      %li
+        %a{href: new_template_path } Create New Template
