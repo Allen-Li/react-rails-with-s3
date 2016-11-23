@@ -20,3 +20,5 @@
 # Ignore Byebug command history file.
 .byebug_history
 /config/application.yml
+/node_modules
+/npm-debug.log
