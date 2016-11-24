@@ -1,0 +1,9 @@
+div.valide-failed > .Select-control, input.valide-failed, textarea.valide-failed {
+  border: red 1px solid;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+button[type='submit'] {
+  float: right;
+}
