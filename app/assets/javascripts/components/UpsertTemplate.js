@@ -40,9 +40,9 @@ export default class UpsertTemplate extends Component {
     if(is_valid) {
       let id = this.state.template_data.id
       if(id) {
-        return Service.get(`/templates/${id}/edit`, this.state.template_data, this.successfulCallback)
+        Service.get(`/templates/${id}/edit`, this.state.template_data, this.successfulCallback)
       } else {
-        return Service.post('/templates', this.state.template_data, this.successfulCallback)
+        Service.post('/templates', this.state.template_data, this.successfulCallback)
       }
     }
   }

@@ -6,6 +6,10 @@ export function post(url, data, successfulCallback, failedCallback) {
   return request(url, 'POST', data, successfulCallback, failedCallback)
 }
 
+export function destroy(url, data={}, successfulCallback) {
+  return request(url, 'DELETE', data, successfulCallback)
+}
+
 function request(url, method, data, successfulCallback, failedCallback) {
   return $.ajax({
     url: url,
