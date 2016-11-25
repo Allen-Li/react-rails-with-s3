@@ -6,6 +6,16 @@ class TemplatesController < ApplicationController
   def new
   end
 
+  def update
+    begin
+      updated_params = params.permit(:name, :html)
+      Template.find(params[:id]).update_attributes(updated_params)
+      redirect_to templates_path
+    rescue Exception => e
+      render_error(e)
+    end
+  end
+
   def create
     begin
       template_data = params.permit(:name, :html)
@@ -17,6 +27,7 @@ class TemplatesController < ApplicationController
   end
 
   def edit
+    @template = Template.find(params[:id])
   end
 
   def destroy
@@ -31,7 +42,7 @@ class TemplatesController < ApplicationController
   private
 
   def templates_data
-    @templates = Template.all.map do |template|
+    @templates = Template.order('updated_at DESC').map do |template|
       {
         id: template.id,
         name: template.name,

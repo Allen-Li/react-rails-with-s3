@@ -40,11 +40,15 @@ export default class UpsertTemplate extends Component {
     if(is_valid) {
       let id = this.state.template_data.id
       if(id) {
-        Service.get(`/templates/${id}/edit`, this.state.template_data, this.successfulCallback)
+        Service.put(`/templates/${id}`, this.state.template_data, this.updateSuccessfulCallback)
       } else {
         Service.post('/templates', this.state.template_data, this.successfulCallback)
       }
     }
+  }
+
+  updateSuccessfulCallback() {
+    alert('The template is updating successfully!')
   }
 
   successfulCallback(result) {
@@ -68,7 +72,9 @@ export default class UpsertTemplate extends Component {
     return (
       <div>
         <label className="control-label">Html</label>
-        <textarea ref="html_textarea" className={`form-control template-html-area ${this.state.html_area_class}`} onChange={this.handleHtmlChange.bind(this)} value={this.state.template_data.html || ''}></textarea>
+        <textarea ref="html_textarea" className={`form-control template-html-area ${this.state.html_area_class}`} onChange={this.handleHtmlChange.bind(this)} value={this.state.template_data.html || ''}
+          placeholder={"Formats like so: \n<html>\n\t<head>\n\t\t{{js and css}}\n\t<\/head>\n\t<body>" +
+          "\n\t\t{{tracking_pixels}}\n\t\t{{content}}\n\t<\/body>\n<\/html>"}></textarea>
       </div>
     )
   }

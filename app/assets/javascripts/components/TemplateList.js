@@ -21,6 +21,10 @@ export default class UpsertTemplate extends Component {
     }
   }
 
+  editTemplate(cell, row) {
+    location.href = `/templates/${cell.id}/edit`
+  }
+
   successfulCallback(result) {
     this.setState({templates_data: result.templates_data})
     alert(result.message)
@@ -31,7 +35,7 @@ export default class UpsertTemplate extends Component {
       <div>
         <button type="button" className="btn btn-info">Preview</button>
         <button type="button" className="btn btn-info">Download</button>
-        <button type="button" className="btn btn-info">Edit</button>
+        <button type="button" className="btn btn-info" onClick={this.editTemplate.bind(cell, row)}>Edit</button>
         <button type="button" className="btn btn-danger delete-template" onClick={this.delete.bind(cell, row)} >Delete</button>
       </div>
     )

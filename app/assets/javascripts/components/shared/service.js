@@ -10,6 +10,10 @@ export function destroy(url, data={}, successfulCallback) {
   return request(url, 'DELETE', data, successfulCallback)
 }
 
+export function put(url, data={}, successfulCallback) {
+  return request(url, 'PUT', data, successfulCallback)
+}
+
 function request(url, method, data, successfulCallback, failedCallback) {
   return $.ajax({
     url: url,
