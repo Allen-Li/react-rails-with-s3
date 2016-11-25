@@ -39,6 +39,11 @@ class TemplatesController < ApplicationController
     end
   end
 
+  def download
+    template = Template.find(params[:template_id])
+    send_data template.html, filename: "#{URI.encode(template.name, /\W/)}.html"
+  end
+
   private
 
   def templates_data

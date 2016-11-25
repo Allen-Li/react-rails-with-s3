@@ -30,11 +30,15 @@ export default class UpsertTemplate extends Component {
     alert(result.message)
   }
 
+  downloadTemplate(cell, row) {
+    location.href = `/templates/${cell.id}/download`
+  }
+
   rowActions(cell, row){
     return (
       <div>
         <button type="button" className="btn btn-info">Preview</button>
-        <button type="button" className="btn btn-info">Download</button>
+        <button type="button" className="btn btn-info" onClick={this.downloadTemplate.bind(cell, row)}>Download</button>
         <button type="button" className="btn btn-info" onClick={this.editTemplate.bind(cell, row)}>Edit</button>
         <button type="button" className="btn btn-danger delete-template" onClick={this.delete.bind(cell, row)} >Delete</button>
       </div>
