@@ -34,10 +34,14 @@ export default class UpsertTemplate extends Component {
     location.href = `/templates/${cell.id}/download`
   }
 
+  previewTemplate(cell, row) {
+    window.open(`/templates/${cell.id}/preview`)
+  }
+
   rowActions(cell, row){
     return (
       <div>
-        <button type="button" className="btn btn-info">Preview</button>
+        <button type="button" className="btn btn-info" onClick={this.previewTemplate.bind(cell, row)}>Preview</button>
         <button type="button" className="btn btn-info" onClick={this.downloadTemplate.bind(cell, row)}>Download</button>
         <button type="button" className="btn btn-info" onClick={this.editTemplate.bind(cell, row)}>Edit</button>
         <button type="button" className="btn btn-danger delete-template" onClick={this.delete.bind(cell, row)} >Delete</button>

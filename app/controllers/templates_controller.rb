@@ -44,6 +44,11 @@ class TemplatesController < ApplicationController
     send_data template.html, filename: "#{URI.encode(template.name, /\W/)}.html"
   end
 
+  def preview
+    template = Template.find(params[:template_id])
+    render html: template.html.html_safe
+  end
+
   private
 
   def templates_data
