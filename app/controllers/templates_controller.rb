@@ -61,8 +61,4 @@ class TemplatesController < ApplicationController
       }
     end
   end
-
-  def render_error e
-    render json: { message: e.message }, status: 400
-  end
 end

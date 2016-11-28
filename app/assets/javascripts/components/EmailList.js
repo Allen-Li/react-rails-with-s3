@@ -10,6 +10,19 @@ export default class Email extends Component {
     }
 
     this.rowActions = this.rowActions.bind(this)
+    this.deleteEmail = this.deleteEmail.bind(this)
+    this.deleteSuccessfulCallback = this.deleteSuccessfulCallback.bind(this)
+  }
+
+  deleteEmail(cell, row) {
+    if (confirm(`Are you sure you want to delete this email`) == true) {
+      Service.destroy(`/emails/${cell.id}`, {}, this.deleteSuccessfulCallback)
+    }
+  }
+
+  deleteSuccessfulCallback(result) {
+    this.setState({emails_data: result.emails_data})
+    alert(result.message)
   }
 
   rowActions(cell, row){
@@ -19,7 +32,7 @@ export default class Email extends Component {
         <button type="button" className="btn btn-info">Download</button>
         <button type="button" className="btn btn-info">Edit</button>
         <button type="button" className="btn btn-info">Copy Link</button>
-        <button type="button" className="btn btn-danger delete-email" >Delete</button>
+        <button type="button" className="btn btn-danger delete-email" onClick={this.deleteEmail.bind(cell, row)} >Delete</button>
       </div>
     )
   }

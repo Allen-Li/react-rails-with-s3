@@ -3,6 +3,15 @@ class EmailsController < ApplicationController
     emails_data
   end
 
+  def destroy
+    begin
+      Email.find(params[:id]).destroy
+      render json: { message: 'Delete email successfully', emails_data: emails_data }, status: 200
+    rescue Exception => e
+      render_error(e)
+    end
+  end
+
   private
 
   def emails_data
