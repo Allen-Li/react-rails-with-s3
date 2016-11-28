@@ -25,11 +25,19 @@ export default class Email extends Component {
     alert(result.message)
   }
 
+  downloadEmail(cell, row) {
+    location.href = `/emails/${cell.id}/download`
+  }
+
+  previewEmail(cell, row) {
+    window.open(`/emails/${cell.id}/preview`)
+  }
+
   rowActions(cell, row){
     return (
       <div>
-        <button type="button" className="btn btn-info">Preview</button>
-        <button type="button" className="btn btn-info">Download</button>
+        <button type="button" className="btn btn-info" onClick={this.previewEmail.bind(cell, row)}>Preview</button>
+        <button type="button" className="btn btn-info" onClick={this.downloadEmail.bind(cell, row)}>Download</button>
         <button type="button" className="btn btn-info">Edit</button>
         <button type="button" className="btn btn-info">Copy Link</button>
         <button type="button" className="btn btn-danger delete-email" onClick={this.deleteEmail.bind(cell, row)} >Delete</button>
