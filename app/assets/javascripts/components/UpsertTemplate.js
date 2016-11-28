@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import * as Service from './shared/service';
+import Dropzone from 'react-dropzone';
 
 export default class UpsertTemplate extends Component {
   constructor(props) {
@@ -7,13 +8,20 @@ export default class UpsertTemplate extends Component {
     this.state = {
       template_data: this.props.initial_data || {},
       name_class: '',
-      html_area_class: ''
+      html_area_class: '',
+      mode: 'upload',
+      new_templates: []
     }
 
+    this.uploadTemplate = this.uploadTemplate.bind(this)
+    this.enterTemplate = this.enterTemplate.bind(this)
     this.handleNameChange = this.handleNameChange.bind(this)
     this.renderHtml = this.renderHtml.bind(this)
     this.submit = this.submit.bind(this)
     this.successfulCallback = this.successfulCallback.bind(this)
+    this.onDrop = this.onDrop.bind(this)
+    this.renderUploadResult = this.renderUploadResult.bind(this)
+    this.uploadSuccessfulCallback = this.uploadSuccessfulCallback.bind(this)
   }
 
   submit(e) {
@@ -79,8 +87,8 @@ export default class UpsertTemplate extends Component {
     )
   }
 
-  render() {
-    return (
+  enterTemplate() {
+    return(
       <form ref="new_template" data-toggle="validator" role="form">
         <div className="form-group">
           <label className="control-label">Name</label>
@@ -95,6 +103,84 @@ export default class UpsertTemplate extends Component {
           <button type="submit" className="btn btn-primary" onClick={this.submit} >Submit</button>
         </div>
       </form>
+    )
+  }
+
+  onDrop(acceptedFiles) {
+    var data = new FormData();
+    acceptedFiles.forEach((value, key) => {
+      data.append(key, value) 
+    })
+
+    Service.fileRequest('/templates/upload', data, this.uploadSuccessfulCallback)
+  }
+
+  uploadSuccessfulCallback(result) {
+    this.setState({
+      new_templates: result.new_templates
+    });
+  }
+
+  uploadTemplate() {
+    return(
+      <div>
+        <div className="drop-zone">
+          <Dropzone onDrop={this.onDrop} multiple disablePreview accept="text/html">
+            <p className="prompt">Dropping some templates here, or click to select templates to upload.</p>
+          </Dropzone>
+        </div>
+        {this.renderUploadResult()}
+      </div>
+    )
+  }
+
+  renderUploadResult() {
+    return(
+      this.state.new_templates.length > 0 ? 
+        <div>
+          <h2>Uploaded {this.state.new_templates.length} files successfully</h2>
+          <div>
+            {
+              this.state.new_templates.map((template, index) => 
+                <p key={index}>
+                  <a href={`/templates/${template.id}/preview`} target="_blank">{template.name}</a>
+                </p>
+              )
+            }
+          </div>
+        </div> : null
+    )
+  }
+
+  uploadMode() {
+    this.setState({mode: 'upload'})
+  }
+
+  enterMode() {
+    this.setState({mode: 'enter'})
+  }
+
+  render() {
+    if(this.state.mode == 'upload') {
+      var upload_btn_class = 'upload-template-btn active'
+      var enter_btn_class = 'enter-template-btn'
+    } else {
+      var upload_btn_class = 'upload-template-btn'
+      var enter_btn_class = 'enter-template-btn active'
+    }
+    return(
+      <div>
+        <div className="template-mode">
+          <a className={upload_btn_class} href="javascript:void(0)" onClick={this.uploadMode.bind(this)}>
+            Upload Template
+          </a>
+          |
+          <a className={enter_btn_class} href="javascript:void(0)" onClick={this.enterMode.bind(this)}>
+            Enter Template
+          </a>
+        </div>
+        {this.state.mode == 'upload' ? this.uploadTemplate() : this.enterTemplate()}
+      </div>
     )
   }
 }

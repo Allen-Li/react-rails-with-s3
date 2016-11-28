@@ -40,13 +40,30 @@ class TemplatesController < ApplicationController
   end
 
   def download
-    template = Template.find(params[:template_id])
+    template = Template.find(params[:id])
     send_data template.html, filename: "#{template.name}.html"
   end
 
   def preview
-    template = Template.find(params[:template_id])
+    template = Template.find(params[:id])
     render html: template.html.html_safe
+  end
+
+  def upload
+    begin
+      new_data = []
+      params.map do |k, v|
+        if v.class == ActionDispatch::Http::UploadedFile
+          html = File.read(v.tempfile)
+          new_data << {name: v.original_filename, html: html}
+        end
+      end
+
+      new_templates = Template.create!(new_data)
+      render json: { message: 'Uploaded templates successfully', new_templates: new_templates }, status: 200
+    rescue Exception => e
+      render_error(e)
+    end
   end
 
   private

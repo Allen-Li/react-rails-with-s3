@@ -13,12 +13,12 @@ class EmailsController < ApplicationController
   end
 
   def download
-    email = Email.find(params[:email_id])
+    email = Email.find(params[:id])
     send_data email.nde, filename: "#{email.name}.html"
   end
 
   def preview
-    email = Email.find(params[:email_id])
+    email = Email.find(params[:id])
     render html: email.nde.html_safe
   end
 

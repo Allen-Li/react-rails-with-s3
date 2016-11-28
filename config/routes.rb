@@ -1,12 +1,18 @@
 Rails.application.routes.draw do
   resources :emails do
-    get 'preview' => 'emails#preview'
-    get 'download' => 'emails#download'
+    member do
+      get 'preview'
+      get 'download'
+    end
   end
 
   resources :templates do
-    get 'preview' => 'templates#preview'
-    get 'download' => 'templates#download'
+    member do
+      get 'preview'
+      get 'download'
+    end
+
+    collection { post 'upload' }
   end
 
   root to: 'emails#index'

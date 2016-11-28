@@ -34,3 +34,25 @@ function request(url, method, data, successfulCallback, failedCallback) {
     }
   })
 }
+
+export function fileRequest(url, data, successfulCallback, failedCallback) {
+  return $.ajax({
+    url: url,
+    method: 'POST',
+    data: data,
+    processData: false, // Don't process the files
+    contentType: false
+  }).done(function(result){
+    if(successfulCallback) {
+      successfulCallback(result)
+    } else {
+      alert(result.message)
+    }
+  }).fail(function(result){
+    if(failedCallback) {
+      failedCallback(result)
+    } else {
+      alert(result.responseText)
+    }
+  })
+}
