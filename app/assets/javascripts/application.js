@@ -15,3 +15,7 @@
 //= require turbolinks
 //= require react_ujs
 //= require components
+
+ReactRailsUJS.handleEvent('turbolinks:before-cache', function() {
+  window.ReactRailsUJS.unmountComponents();
+});
