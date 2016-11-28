@@ -8,6 +8,7 @@
     "browserify-incremental": "^3.1.1",
     "react": "^15.4.1",
     "react-bootstrap-table": "^3.0.0-beta.2",
+    "react-copy-to-clipboard": "^4.2.3",
     "react-dom": "^15.4.1",
     "react-redux": "^4.4.6",
     "redux": "^3.6.0",

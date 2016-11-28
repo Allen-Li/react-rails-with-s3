@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as Service from './shared/service';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 export default class Email extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ export default class Email extends Component {
     alert(result.message)
   }
 
-  downloadEmail(cell, row) {
+  downloadEmail(cell) {
     location.href = `/emails/${cell.id}/download`
   }
 
@@ -33,13 +34,20 @@ export default class Email extends Component {
     window.open(`/emails/${cell.id}/preview`)
   }
 
+  copyNdePath(cell, row) {
+    alert('Copy Successfully!')
+  }
+
   rowActions(cell, row){
     return (
       <div>
         <button type="button" className="btn btn-info" onClick={this.previewEmail.bind(cell, row)}>Preview</button>
         <button type="button" className="btn btn-info" onClick={this.downloadEmail.bind(cell, row)}>Download</button>
+        <CopyToClipboard text={row.path || 'Path is null'}
+          onCopy={this.copyNdePath}>
+          <button type="button" className="btn btn-info">Copy Path</button>
+        </CopyToClipboard>
         <button type="button" className="btn btn-info">Edit</button>
-        <button type="button" className="btn btn-info">Copy Link</button>
         <button type="button" className="btn btn-danger delete-email" onClick={this.deleteEmail.bind(cell, row)} >Delete</button>
       </div>
     )

@@ -29,6 +29,7 @@ class EmailsController < ApplicationController
       {
         id: email.id,
         name: email.name,
+        path: email.path,
         template_name: email.template.try(:name),
         created_at: email.created_at.strftime('%m/%d/%Y'),
         updated_at: email.updated_at.strftime('%m/%d/%Y')
