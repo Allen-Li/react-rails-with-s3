@@ -9,7 +9,7 @@ export default class UpsertTemplate extends Component {
       template_data: this.props.initial_data || {},
       name_class: '',
       html_area_class: '',
-      mode: 'upload',
+      mode: this.chooseMode(),
       new_templates: []
     }
 
@@ -22,6 +22,10 @@ export default class UpsertTemplate extends Component {
     this.onDrop = this.onDrop.bind(this)
     this.renderUploadResult = this.renderUploadResult.bind(this)
     this.uploadSuccessfulCallback = this.uploadSuccessfulCallback.bind(this)
+  }
+
+  chooseMode() {
+    return this.props.initial_data ? 'enter' : 'upload'
   }
 
   submit(e) {
