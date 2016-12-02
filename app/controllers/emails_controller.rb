@@ -23,6 +23,19 @@ class EmailsController < ApplicationController
     end
   end
 
+  def edit
+    @email = Email.find(params[:id]).nested_email_data
+  end
+
+  def update
+    begin
+      Email.find(params[:id]).update_attributes(permit_params)
+      redirect_to emails_path
+    rescue Exception => e
+      render_error(e)
+    end
+  end
+
   def download
     email = Email.find(params[:id])
     send_data email.nde, filename: "#{email.name}.html"
@@ -62,7 +75,7 @@ class EmailsController < ApplicationController
       :email_type,
       :moat_tags,
       tracking_pixels: [], 
-      images_attributes: [:asset, :asset_file_name, :alt, :link, :position, :width]
+      images_attributes: [:asset, :asset_file_name, :alt, :link, :id, :_destroy, :position, :width]
     )
   end
 end

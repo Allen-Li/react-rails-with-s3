@@ -42,45 +42,50 @@ export default class ImageContainer extends Component {
 
   renderUploadResult() {
     var total_index = this.props.images.length - 1
+    var sort_index = 0
     return this.props.images.map((image, index) => {
-      return(
-        <div className="image-preview" key={index}>
-          <div className="image-container">
-            <a href="javascript:void(0)" onClick={this.handleImageClick.bind(this, index)}>
-              <img ref="abc" className="image-thum" src={image.asset} />
-            </a>
-          </div>
-          <div className="image-info">
-            <p><b>Image Name : </b>{image.asset_file_name}</p>
-            <div className="row">
-              <p className="col-sm-2"><b>Sort : </b> {index + 1}</p>
-              <p className="col-sm-10"><b>Width : </b> {image.width}px</p>
+      if(!image._destroy) {
+      sort_index ++
+        return(
+          image._destroy ? '' :
+          <div className="image-preview" key={index}>
+            <div className="image-container">
+              <a href="javascript:void(0)" onClick={this.handleImageClick.bind(this, index)}>
+                <img ref="abc" className="image-thum" src={image.asset} />
+              </a>
             </div>
-            <div className="form-group row">
-              <label className="control-label col-sm-1">Link:</label>
-              <div className="col-sm-11">
-                <input type="text" className={"form-control"} id="inputName" placeholder="Image Link"
-                  onChange={this.props.setImageInfo.bind(this, 'link', index)}></input>
+            <div className="image-info">
+              <p><b>Image Name : </b>{image.asset_file_name}</p>
+              <div className="row">
+                <p className="col-sm-2"><b>Sort : </b> {sort_index}</p>
+                <p className="col-sm-10"><b>Width : </b> {image.width}px</p>
+              </div>
+              <div className="form-group row">
+                <label className="control-label col-sm-1">Link:</label>
+                <div className="col-sm-11">
+                  <input type="text" className={"form-control"} id="inputName" placeholder="Image Link"
+                    onChange={this.props.setImageInfo.bind(this, 'link', index)} value={image.link || ""}></input>
+                </div>
+              </div>
+              <div className="form-group row">
+                <label className="control-label col-sm-1">Alt:</label>
+                <div className="col-sm-11">
+                  <input type="text" className={"form-control"} id="inputName" placeholder="Image Alt"
+                    onChange={this.props.setImageInfo.bind(this, 'alt', index)} value={image.alt || ""}></input>
+                </div>
+              </div>
+              <div className="image-action">
+                <button type="button" className="btn btn-info" onClick={this.props.swapImage.bind(this, index, 'up')} 
+                  disabled={index == 0} >Up</button>
+                <button type="button" className="btn btn-info" onClick={this.props.swapImage.bind(this, index, 'down')}
+                  disabled={index == total_index} >Down</button>
+                <button type="button" className="btn btn-danger delete-email" 
+                  onClick={this.props.removeImage.bind(this, index)}>Delete</button>
               </div>
             </div>
-            <div className="form-group row">
-              <label className="control-label col-sm-1">Alt:</label>
-              <div className="col-sm-11">
-                <input type="text" className={"form-control"} id="inputName" placeholder="Image Alt"
-                  onChange={this.props.setImageInfo.bind(this, 'alt', index)}></input>
-              </div>
-            </div>
-            <div className="image-action">
-              <button type="button" className="btn btn-info" onClick={this.props.swapImage.bind(this, index, 'up')} 
-                disabled={index == 0} >Up</button>
-              <button type="button" className="btn btn-info" onClick={this.props.swapImage.bind(this, index, 'down')}
-                disabled={index == total_index} >Down</button>
-              <button type="button" className="btn btn-danger delete-email" 
-                onClick={this.props.removeImage.bind(this, index)}>Delete</button>
-            </div>
           </div>
-        </div>
-      )
+        )
+      }
     })
   }
 

@@ -22,7 +22,7 @@ export default class UpsertEmail extends Component {
 
   initState() {
     return {
-      email_data: {
+      email_data: this.props.initial_data || {
         name: '',
         tracking_pixels: [''],
         moat_tags: '',
@@ -260,7 +260,7 @@ export default class UpsertEmail extends Component {
 
   removeImage = (index) => {
     let new_email_data = Object.assign({}, this.state.email_data);
-    new_email_data.images_attributes.splice(index, 1)
+    new_email_data.images_attributes[index]['_destroy'] = true
     this.setState({ email_data: new_email_data});
   }
 
@@ -360,7 +360,7 @@ export default class UpsertEmail extends Component {
         </div>
 
         <div className="form-group">
-          <button className="btn btn-primary" onClick={this.submit} >Submit</button>
+          <button type="submit" className="btn btn-primary" onClick={this.submit} >Submit</button>
         </div>
       </form>
     )

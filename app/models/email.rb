@@ -2,7 +2,7 @@ class Email < ApplicationRecord
   has_many :images, dependent: :destroy
   belongs_to :template
 
-  accepts_nested_attributes_for :images
+  accepts_nested_attributes_for :images, allow_destroy: true
 
   serialize :tracking_pixels
 

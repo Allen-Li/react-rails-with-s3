@@ -38,6 +38,10 @@ export default class Email extends Component {
     alert('Copy Successfully!')
   }
 
+  editEmail(cell, row) {
+    location.href = `/emails/${cell.id}/edit`
+  }
+
   rowActions(cell, row){
     return (
       <div>
@@ -47,7 +51,7 @@ export default class Email extends Component {
           onCopy={this.copyNdePath}>
           <button type="button" className="btn btn-info">Copy Path</button>
         </CopyToClipboard>
-        <button type="button" className="btn btn-info">Edit</button>
+        <button type="button" className="btn btn-info" onClick={this.editEmail.bind(cell, row)}>Edit</button>
         <button type="button" className="btn btn-danger delete-email" onClick={this.deleteEmail.bind(cell, row)} >Delete</button>
       </div>
     )
