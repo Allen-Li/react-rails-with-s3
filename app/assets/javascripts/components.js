@@ -3,3 +3,4 @@ window.ReactDOM = require('react-dom');
 window.UpsertTemplate = require('./components/UpsertTemplate.js')
 window.TemplateList = require('./components/TemplateList.js')
 window.EmailList = require('./components/EmailList.js')
+window.UpsertEmail = require('./components/upsert_email/Main.js')

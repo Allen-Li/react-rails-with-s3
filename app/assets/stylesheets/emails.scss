@@ -1,3 +1,71 @@
 div.email-list {
   width: 1600px;
 }
+
+.dynamic_input_fields {
+  > .add-dynamic-input-field {
+    margin-left: 15px;
+    text-decoration: none;
+  }
+
+  .dynamic-input-field {
+    margin-bottom: 15px;
+    > input {
+      display: inline;
+      width: 95%;
+    }
+  }
+
+  .delete-dynamic-input-field {
+    margin-left: 15px;
+    font-size: 15px;
+  }
+}
+
+.upsert-email {
+  .client-html-area, .css-content-area {
+    height: 300px;
+  }
+
+  div.email-drop-zone {
+    >div{
+      width: 100% !important;
+      height: 100px !important;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 5px;
+    }
+
+    .prompt {
+      text-align: center;
+      font-size: 25px;
+    }
+  }
+
+
+  .image-preview {
+    margin-top: 20px;
+    .image-container {
+      width: 300px;
+      display: inline-block;
+      .image-thum {
+        height: 200px;
+        max-width: 300px;
+      }
+    }
+    .image-info {
+      display: inline-block;
+      margin-left: 50px;
+      vertical-align: middle;
+      min-width: 600px;
+      .image-action {
+        button {
+          margin-right: 10px;
+        }
+      }
+      label {
+        padding-top: 6px;
+      }
+    }
+  }
+}

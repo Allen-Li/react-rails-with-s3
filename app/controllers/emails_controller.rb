@@ -1,4 +1,6 @@
 class EmailsController < ApplicationController
+  before_action :template_optins, only: [:new, :edit]
+
   def index
     emails_data
   end
@@ -8,6 +10,15 @@ class EmailsController < ApplicationController
       Email.find(params[:id]).destroy
       render json: { message: 'Delete email successfully', emails_data: emails_data }, status: 200
     rescue Exception => e
+      render_error(e)
+    end
+  end
+
+  def create
+    begin
+      @email = Email.create!(permit_params)
+      redirect_to edit_email_path @email
+    rescue => e
       render_error(e)
     end
   end
@@ -35,5 +46,23 @@ class EmailsController < ApplicationController
         updated_at: email.updated_at.strftime('%m/%d/%Y')
       }
     end
+  end
+
+  def template_optins
+    @template_options = Template.all.order('created_at DESC').map do |template|
+      {value: template.id, label: template.name}
+    end
+  end
+
+  def permit_params
+    params.permit(
+      :name,
+      :html,
+      :template_id,
+      :email_type,
+      :moat_tags,
+      tracking_pixels: [], 
+      images_attributes: [:asset, :asset_file_name, :alt, :link, :position, :width]
+    )
   end
 end

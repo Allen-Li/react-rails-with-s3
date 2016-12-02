@@ -35,12 +35,12 @@ export default class UpsertTemplate extends Component {
     let html_area_class = ''
 
     if (this.refs.name_input.value == ''){
-      name_class = 'valide-failed'
+      name_class = 'valid-failed'
       is_valid = false
     }
 
     if (this.refs.html_textarea.value == '') {
-      html_area_class = 'valide-failed'
+      html_area_class = 'valid-failed'
       is_valid = false
     }
 
