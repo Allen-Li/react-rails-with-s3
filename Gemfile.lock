@@ -276,6 +276,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   listen (~> 3.0.5)
+  nokogiri
   paperclip
   pg
   pry
