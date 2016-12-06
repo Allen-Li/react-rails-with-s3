@@ -1,11 +1,13 @@
 class Image < ApplicationRecord
   belongs_to :email, optional: true
 
-  has_attached_file :asset
-    validates_attachment_content_type :asset,
-    :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],
-    :path => ":rails_root/public/uploads/images/:id_:style_:fingerprint.:extension",
-    :url => "/uploads/images/:id_:style_:fingerprint.:extension"
+  has_attached_file :asset,
+    storage: :s3,
+    path: ':env_folder/:date/:id/:filename',
+    content_type: { content_type: 'image/jpeg' }
+
+  validates_attachment_content_type :asset,
+    :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
   def data_with_base64
     image_data = attributes.slice('id', 'link', 'alt', 'asset_file_name', 'width')
@@ -22,7 +24,6 @@ class Image < ApplicationRecord
   end
 
   private
-
 
   def img_tag_el
     "<img style=\"display: block;\" border=\"0\" src=\"https://#{asset.url}\" alt=\"#{alt}\" width=\"100%\" style=\"max-width:100%\"/>"
