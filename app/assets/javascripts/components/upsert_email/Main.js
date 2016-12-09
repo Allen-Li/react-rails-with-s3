@@ -4,6 +4,10 @@ import Dropzone from 'react-dropzone';
 import Select from 'react-select';
 import DynamicInputField from './DynamicInputField';
 import ImageContainer from './ImageContainer';
+import CodeMirror from 'react-codemirror'
+require('codemirror/mode/htmlembedded/htmlembedded')
+require('codemirror/mode/javascript/javascript')
+require('codemirror/addon/display/placeholder')
 
 export default class UpsertEmail extends Component {
   constructor(props) {
@@ -15,7 +19,7 @@ export default class UpsertEmail extends Component {
     this.submit = this.submit.bind(this)
     this.renderEmailTypeBody = this.renderEmailTypeBody.bind(this)
     this.renderClientHtml = this.renderClientHtml.bind(this)
-    this.renderCssContent = this.renderCssContent.bind(this)
+    this.renderMoatTags = this.renderMoatTags.bind(this)
     this.renderEmailType = this.renderEmailType.bind(this)
     this.successfulCallback = this.successfulCallback.bind(this)
   }
@@ -165,8 +169,8 @@ export default class UpsertEmail extends Component {
     this.setState({ email_data: new_email_data, name_class: '' });
   }
 
-  handleClientHtmlChange(htmlEl) {
-    this.setClientHtmlState(htmlEl.target.value)
+  handleClientHtmlChange(html) {
+    this.setClientHtmlState(html)
   }
 
   setClientHtmlState = (html) => {
@@ -175,9 +179,9 @@ export default class UpsertEmail extends Component {
     this.setState({ email_data: new_email_data, html_area_class: '' });
   }
 
-   handleCssContentChange(css_content) {
+   handleMoatTagsChange(moat_tags) {
     let new_email_data = Object.assign({}, this.state.email_data);
-    new_email_data.css_content = css_content.target.value;
+    new_email_data.moat_tags = moat_tags;
     this.setState({ email_data: new_email_data });
   }
 
@@ -197,22 +201,24 @@ export default class UpsertEmail extends Component {
     }
   }
 
-  renderCssContent() {
+  renderMoatTags() {
+    var options = { lineWrapping: true, lineNumbers: true, mode: 'javascript' };
     return (
-      <div className="form-group">
-        <label className="control-label"> CSS Content </label>
-        <textarea className="form-control css-content-area"
-          onChange={this.handleCssContentChange.bind(this)} value={this.state.email_data.css_content || ''} ></textarea>
+      <div className="form-group moat-tags-area">
+        <label className="control-label"> Moat Tags </label>
+        <CodeMirror ref="moat_tags" value={this.state.email_data.moat_tags || ''}
+          onChange={this.handleMoatTagsChange.bind(this)} options={options} />
       </div>
     )
   }
 
   renderClientHtml() {
+    var options = { lineWrapping: true, lineNumbers: true, mode: 'htmlmixed' };
     return (
-      <div>
+      <div className={this.state.html_area_class}>
         <label className="control-label">Client Html</label>
-        <textarea className={`form-control client-html-area ${this.state.html_area_class}`}
-          onChange={this.handleClientHtmlChange.bind(this)} value={this.state.email_data.html || ''} ></textarea>
+        <CodeMirror ref="html_textarea" value={this.state.email_data.html || ''}
+          onChange={this.handleClientHtmlChange.bind(this)} options={options} />
         <input type="file" className="form-control" onChange={this.setClientHtml} accept="text/html"></input>
       </div>
     )
@@ -353,7 +359,7 @@ export default class UpsertEmail extends Component {
         </div>
 
         {this.renderDynamicAttribute()}
-        {this.renderCssContent()}
+        {this.renderMoatTags()}
 
         <div className="form-group">
           {this.renderEmailTypeBody()}

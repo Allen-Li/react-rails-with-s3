@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import * as Service from './shared/service';
 import Dropzone from 'react-dropzone';
+import CodeMirror from 'react-codemirror'
+require('codemirror/mode/htmlembedded/htmlembedded')
+require('codemirror/addon/display/placeholder')
 
 export default class UpsertTemplate extends Component {
   constructor(props) {
@@ -39,7 +42,7 @@ export default class UpsertTemplate extends Component {
       is_valid = false
     }
 
-    if (this.refs.html_textarea.value == '') {
+    if (this.refs.html_textarea.props.value == '') {
       html_area_class = 'valid-failed'
       is_valid = false
     }
@@ -76,17 +79,26 @@ export default class UpsertTemplate extends Component {
 
   handleHtmlChange(html) {
     let new_template_data = Object.assign({}, this.state.template_data);
-    new_template_data.html = html.target.value;
+    new_template_data.html = html;
     this.setState({ template_data: new_template_data, html_area_class: '' });
   }
 
   renderHtml() {
+    let placeholder = "Formats like so: \n<html>\n  <head>\n    {{moat_tags}}\n  <\/head>\n  <body>" +
+      "\n    {{tracking_pixels}}\n    {{content}}\n  <\/body>\n<\/html>"
+    var options = {
+      gutters: ["note-gutter", "CodeMirror-linenumbers"],
+      lineWrapping: true,
+      placeholder: placeholder,
+      lineNumbers: true,
+      mode: 'htmlmixed',
+      height: '600px'
+    };
     return (
-      <div>
+      <div className={`${this.state.html_area_class}`}>
         <label className="control-label">Html</label>
-        <textarea ref="html_textarea" className={`form-control template-html-area ${this.state.html_area_class}`} onChange={this.handleHtmlChange.bind(this)} value={this.state.template_data.html || ''}
-          placeholder={"Formats like so: \n<html>\n\t<head>\n\t\t{{js and css}}\n\t<\/head>\n\t<body>" +
-          "\n\t\t{{tracking_pixels}}\n\t\t{{content}}\n\t<\/body>\n<\/html>"}></textarea>
+        <CodeMirror ref="html_textarea" value={this.state.template_data.html || ''}
+          onChange={this.handleHtmlChange.bind(this)} options={options} />
       </div>
     )
   }

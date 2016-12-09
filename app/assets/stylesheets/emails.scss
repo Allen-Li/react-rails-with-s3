@@ -23,8 +23,13 @@ div.email-list {
 }
 
 .upsert-email {
-  .client-html-area, .css-content-area {
-    height: 300px;
+  .moat-tags-area {
+    .ReactCodeMirror {
+      height: 102px;
+      > .CodeMirror {
+        height: 100px;
+      }
+    }
   }
 
   div.email-drop-zone {

@@ -1,4 +1,4 @@
-div.valid-failed > .Select-control, input.valid-failed, textarea.valid-failed {
+div.valid-failed > .Select-control, div.valid-failed > .ReactCodeMirror, input.valid-failed, textarea.valid-failed {
   border: red 1px solid;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
