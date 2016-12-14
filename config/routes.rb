@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     member do
       get 'preview'
       get 'download'
+      put 'publish'
     end
   end
 

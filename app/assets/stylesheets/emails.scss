@@ -47,6 +47,20 @@ div.email-list {
     }
   }
 
+  button.email-publish {
+    margin-right: 10px;
+  }
+
+  div.preview-edit {
+    border: 1px #5cb85c solid;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    >iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+  }
 
   .image-preview {
     margin-top: 20px;

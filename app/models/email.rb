@@ -9,11 +9,22 @@ class Email < ApplicationRecord
   before_save :handle_name
   after_save :destroy_invalid_data
   after_save :update_nde
+  after_destroy :destroy_nde_on_aws, if: :path
 
   def nested_email_data
     email_data = attributes
     email_data[:images_attributes] = images.order(:position).map(&:data_with_base64)
     email_data
+  end
+
+  def publish
+    path = "#{Rails.root}/tmp/nde/#{name}"
+    File.open(path, 'w+') {|f| f.write(nde) }
+    obj = s3_bucket.object("#{Rails.env}/nde/#{name}.html")
+    obj.upload_file(path, acl:'public-read')
+    update_attributes(path: obj.public_url)
+  ensure
+    File.delete(path)
   end
 
   private
@@ -101,5 +112,15 @@ class Email < ApplicationRecord
     "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" style=\"max-width:#{min_image_width}px\">
       #{images_el}
     </table>"
+  end
+
+  def destroy_nde_on_aws
+    key = URI.parse(path).path[1..-1]
+    s3_bucket.object(key).delete
+  end
+
+  def s3_bucket
+    s3 = Aws::S3::Resource.new
+    s3.bucket(ENV['S3_BUCKET_NAME'])
   end
 end

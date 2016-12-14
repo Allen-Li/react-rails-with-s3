@@ -30,7 +30,7 @@ class EmailsController < ApplicationController
   def update
     begin
       Email.find(params[:id]).update_attributes(permit_params)
-      redirect_to emails_path
+      redirect_to edit_email_path
     rescue Exception => e
       render_error(e)
     end
@@ -44,6 +44,11 @@ class EmailsController < ApplicationController
   def preview
     email = Email.find(params[:id])
     render html: email.nde.html_safe
+  end
+
+  def publish
+    Email.find(params[:id]).publish
+    redirect_to edit_email_path
   end
 
   private

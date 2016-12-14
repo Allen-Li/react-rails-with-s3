@@ -340,6 +340,30 @@ export default class UpsertEmail extends Component {
     )
   }
 
+  renderEmailPreview() {
+    var id = this.state.email_data.id
+    return(
+      <div className="preview-edit">
+        <iframe src={`/emails/${id}/preview`}>
+        </iframe>
+      </div>
+    )
+  }
+
+  publish = () => {
+    let id = this.state.email_data.id
+    Service.put(`/emails/${id}/publish`, {}, this.publishSuccessfulCallback)
+  }
+
+  publishSuccessfulCallback() {
+    alert('Published successfully!')
+  }
+
+  renderPublishButton() {
+    return this.state.email_data.id ? 
+      <button type="submit" className="email-publish btn btn-success" onClick={this.publish} >Publish</button> : ''
+  }
+
   render() {
     return (
       <form>
@@ -367,7 +391,10 @@ export default class UpsertEmail extends Component {
 
         <div className="form-group">
           <button type="submit" className="btn btn-primary" onClick={this.submit} >Submit</button>
+          {this.renderPublishButton()}
         </div>
+
+        {this.state.email_data.id ? this.renderEmailPreview() : ''}
       </form>
     )
   }
