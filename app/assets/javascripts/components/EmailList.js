@@ -39,6 +39,7 @@ export default class Email extends Component {
   }
 
   editEmail(cell, row) {
+    $('#loading').show()
     location.href = `/emails/${cell.id}/edit`
   }
 

@@ -22,6 +22,7 @@ export default class UpsertTemplate extends Component {
   }
 
   editTemplate(cell, row) {
+    $('#loading').show()
     location.href = `/templates/${cell.id}/edit`
   }
 

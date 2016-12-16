@@ -15,6 +15,7 @@ export function put(url, data={}, successfulCallback) {
 }
 
 function request(url, method, data, successfulCallback, failedCallback) {
+  $('#loading').show()
   return $.ajax({
     url: url,
     method: method,
@@ -32,10 +33,13 @@ function request(url, method, data, successfulCallback, failedCallback) {
     } else {
       alert(result.responseText)
     }
+  }).always(function(){
+    $('#loading').hide()
   })
 }
 
 export function fileRequest(url, data, successfulCallback, failedCallback) {
+  $('#loading').show()
   return $.ajax({
     url: url,
     method: 'POST',
@@ -54,5 +58,7 @@ export function fileRequest(url, data, successfulCallback, failedCallback) {
     } else {
       alert(result.responseText)
     }
+  }).always(function(){
+    $('#loading').hide()
   })
 }
