@@ -51,6 +51,9 @@ class EmailsController < ApplicationController
     redirect_to edit_email_path
   end
 
+  def information
+  end
+
   private
 
   def emails_data

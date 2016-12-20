@@ -16,6 +16,7 @@
     "react-copy-to-clipboard": "^4.2.3",
     "react-dom": "^15.4.1",
     "react-dropzone": "^3.7.3",
+    "react-markdown": "^2.4.2",
     "react-select": "^1.0.0-rc.2"
   },
   "scripts": {

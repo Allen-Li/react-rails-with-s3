@@ -5,6 +5,8 @@ Rails.application.routes.draw do
       get 'download'
       put 'publish'
     end
+
+    collection { get 'information' }
   end
 
   resources :templates do
