@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as Service from './shared/service';
+import Alert from 'react-s-alert';
 
 export default class UpsertTemplate extends Component {
   constructor(props) {
@@ -28,7 +29,9 @@ export default class UpsertTemplate extends Component {
 
   successfulCallback(result) {
     this.setState({templates_data: result.templates_data})
-    alert(result.message)
+    Alert.success(result.message, {
+      position: 'bottom'
+    });
   }
 
   downloadTemplate(cell, row) {
@@ -78,20 +81,23 @@ export default class UpsertTemplate extends Component {
     }
 
     return(
-      <BootstrapTable data={this.state.templates_data} hover pagination options={options} striped={true} >
-        <TableHeaderColumn dataField="id" dataSort={true} isKey={true} width="50"> ID </TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataSort={true}
-          filter={{type: "TextFilter", placeholder: "Please enter a value"}}>
-          Name</TableHeaderColumn>
-        <TableHeaderColumn filterValue={this.dateFilter} dataField="created_at" dataSort={true}
-          filter={{type: "DateFilter"}} width="250">
-          Created At</TableHeaderColumn>
-        <TableHeaderColumn filterValue={this.dateFilter} dataField="updated_at" dataSort={true}
-          filter={{type: "DateFilter"}} width="250">
-          Updated At</TableHeaderColumn>
-        <TableHeaderColumn columnClassName="list-action" width="320" dataFormat={this.rowActions}>
-          Actions</TableHeaderColumn>
-      </BootstrapTable>
+      <div>
+        <BootstrapTable data={this.state.templates_data} hover pagination options={options} striped={true} >
+          <TableHeaderColumn dataField="id" dataSort={true} isKey={true} width="50"> ID </TableHeaderColumn>
+          <TableHeaderColumn dataField="name" dataSort={true}
+            filter={{type: "TextFilter", placeholder: "Please enter a value"}}>
+            Name</TableHeaderColumn>
+          <TableHeaderColumn filterValue={this.dateFilter} dataField="created_at" dataSort={true}
+            filter={{type: "DateFilter"}} width="250">
+            Created At</TableHeaderColumn>
+          <TableHeaderColumn filterValue={this.dateFilter} dataField="updated_at" dataSort={true}
+            filter={{type: "DateFilter"}} width="250">
+            Updated At</TableHeaderColumn>
+          <TableHeaderColumn columnClassName="list-action" width="320" dataFormat={this.rowActions}>
+            Actions</TableHeaderColumn>
+        </BootstrapTable>
+        <Alert stack={true} timeout={3000} />
+      </div>
     )
   }
 }

@@ -1,4 +1,6 @@
 class Email < ApplicationRecord
+  validates :name, uniqueness: { message: "%{value} has already been taken." }
+
   has_many :images, dependent: :destroy
   belongs_to :template
 

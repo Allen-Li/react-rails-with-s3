@@ -9,8 +9,8 @@ class TemplatesController < ApplicationController
   def update
     begin
       updated_params = params.permit(:name, :html)
-      Template.find(params[:id]).update_attributes(updated_params)
-      redirect_to templates_path
+      Template.find(params[:id]).update_attributes!(updated_params)
+      render json: { message: 'Updating template successfully!'}, status: 200
     rescue Exception => e
       render_error(e)
     end

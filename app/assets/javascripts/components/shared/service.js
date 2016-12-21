@@ -6,12 +6,12 @@ export function post(url, data, successfulCallback, failedCallback) {
   return request(url, 'POST', data, successfulCallback, failedCallback)
 }
 
-export function destroy(url, data={}, successfulCallback) {
-  return request(url, 'DELETE', data, successfulCallback)
+export function destroy(url, data={}, successfulCallback, failedCallback) {
+  return request(url, 'DELETE', data, successfulCallback, failedCallback)
 }
 
-export function put(url, data={}, successfulCallback) {
-  return request(url, 'PUT', data, successfulCallback)
+export function put(url, data={}, successfulCallback, failedCallback) {
+  return request(url, 'PUT', data, successfulCallback, failedCallback)
 }
 
 function request(url, method, data, successfulCallback, failedCallback) {

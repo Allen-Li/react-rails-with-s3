@@ -16,8 +16,8 @@ class EmailsController < ApplicationController
 
   def create
     begin
-      @email = Email.create!(permit_params)
-      redirect_to edit_email_path @email
+      email = Email.create!(permit_params)
+      render json: { message: 'Created email successfully!', email_data: email.nested_email_data }, status: 200
     rescue => e
       render_error(e)
     end
@@ -29,8 +29,9 @@ class EmailsController < ApplicationController
 
   def update
     begin
-      Email.find(params[:id]).update_attributes(permit_params)
-      redirect_to edit_email_path
+      email = Email.find(params[:id])
+      email.update_attributes!(permit_params)
+      render json: { message: 'Updated email successfully!', email_data: email.nested_email_data }, status: 200
     rescue Exception => e
       render_error(e)
     end

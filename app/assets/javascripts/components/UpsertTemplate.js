@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import * as Service from './shared/service';
 import Dropzone from 'react-dropzone';
 import CodeMirror from 'react-codemirror'
+import Alert from 'react-s-alert';
 require('codemirror/mode/htmlembedded/htmlembedded')
 require('codemirror/addon/display/placeholder')
 
@@ -54,21 +55,33 @@ export default class UpsertTemplate extends Component {
 
     if(is_valid) {
       let id = this.state.template_data.id
+      Alert.closeAll()
       if(id) {
-        Service.put(`/templates/${id}`, this.state.template_data, this.updateSuccessfulCallback)
+        Service.put(`/templates/${id}`, this.state.template_data, this.updateSuccessfulCallback, this.failingCallback)
       } else {
-        Service.post('/templates', this.state.template_data, this.successfulCallback)
+        Service.post('/templates', this.state.template_data, this.successfulCallback, this.failingCallback)
       }
     }
   }
 
-  updateSuccessfulCallback() {
-    alert('The template is updating successfully!')
+  failingCallback(result) {
+    Alert.error(result.responseJSON.message, {
+      position: 'bottom',
+      timeout: 'none'
+    });
+  }
+
+  updateSuccessfulCallback(result) {
+    Alert.success(result.message, {
+      position: 'bottom'
+    });
   }
 
   successfulCallback(result) {
     this.setState({template_data: {}})
-    alert(result.message)
+    Alert.success(result.message, {
+      position: 'bottom'
+    });
   }
   
   handleNameChange(name) {
@@ -135,6 +148,9 @@ export default class UpsertTemplate extends Component {
     this.setState({
       new_templates: result.new_templates
     });
+    Alert.success(result.message, {
+      position: 'bottom'
+    });
   }
 
   uploadTemplate() {
@@ -196,6 +212,7 @@ export default class UpsertTemplate extends Component {
           </a>
         </div>
         {this.state.mode == 'upload' ? this.uploadTemplate() : this.enterTemplate()}
+        <Alert stack={true} timeout={3000} />
       </div>
     )
   }

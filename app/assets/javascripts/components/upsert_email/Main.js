@@ -5,6 +5,7 @@ import Select from 'react-select';
 import DynamicInputField from './DynamicInputField';
 import ImageContainer from './ImageContainer';
 import CodeMirror from 'react-codemirror'
+import Alert from 'react-s-alert';
 require('codemirror/mode/htmlembedded/htmlembedded')
 require('codemirror/mode/javascript/javascript')
 require('codemirror/addon/display/placeholder')
@@ -22,6 +23,7 @@ export default class UpsertEmail extends Component {
     this.renderMoatTags = this.renderMoatTags.bind(this)
     this.renderEmailType = this.renderEmailType.bind(this)
     this.successfulCallback = this.successfulCallback.bind(this)
+    this.updateSuccessfulCallback = this.updateSuccessfulCallback.bind(this)
   }
 
   initState() {
@@ -119,16 +121,27 @@ export default class UpsertEmail extends Component {
     if(is_valid) {
       let id = this.state.email_data.id
       this.update_position()
+      Alert.closeAll()
       if(id) {
-        Service.put(`/emails/${id}`, this.state.email_data, this.updateSuccessfulCallback)
+        Service.put(`/emails/${id}`, this.state.email_data, this.updateSuccessfulCallback, this.failingCallback)
       } else {
-        Service.post('/emails', this.state.email_data, this.successfulCallback)
+        Service.post('/emails', this.state.email_data, this.successfulCallback, this.failingCallback)
       }
     }
   }
 
+  failingCallback(result) {
+    Alert.error(result.responseJSON.message, {
+      position: 'bottom',
+      timeout: 'none'
+    });
+  }
+
   showAlertMessage(message) {
-    alert(message)
+    Alert.error(message, {
+      position: 'bottom',
+      timeout: 'none'
+    });
   }
 
   update_position = () => {
@@ -145,13 +158,22 @@ export default class UpsertEmail extends Component {
     }).length
   }
 
-  updateSuccessfulCallback() {
-    alert('The email is updating successfully!')
+  updateSuccessfulCallback (result){
+    Alert.success('The email is updating successfully!', {
+      position: 'bottom'
+    });
+    this.setState({email_data: result.email_data})
+    let iframe = this.refs.iframe_preview
+    iframe.src = iframe.src
   }
 
   successfulCallback(result) {
-    this.setState(this.initState())
-    alert('New email successfully!')
+    Alert.success('New email successfully!', {
+      position: 'bottom'
+    });
+    this.setState({email_data: result.email_data})
+    let iframe = this.refs.iframe_preview
+    iframe.src = iframe.src
   }
 
   template_select() {
@@ -344,7 +366,7 @@ export default class UpsertEmail extends Component {
     var id = this.state.email_data.id
     return(
       <div className="preview-edit">
-        <iframe src={`/emails/${id}/preview`}>
+        <iframe ref="iframe_preview" src={`/emails/${id}/preview`}>
         </iframe>
       </div>
     )
@@ -352,11 +374,14 @@ export default class UpsertEmail extends Component {
 
   publish = () => {
     let id = this.state.email_data.id
-    Service.put(`/emails/${id}/publish`, {}, this.publishSuccessfulCallback)
+    Alert.closeAll()
+    Service.put(`/emails/${id}/publish`, {}, this.publishSuccessfulCallback, this.failingCallback)
   }
 
   publishSuccessfulCallback() {
-    alert('Published successfully!')
+    Alert.success('Published successfully!', {
+      position: 'top-right'
+    });
   }
 
   renderPublishButton() {
@@ -395,6 +420,7 @@ export default class UpsertEmail extends Component {
         </div>
 
         {this.state.email_data.id ? this.renderEmailPreview() : ''}
+        <Alert stack={true} timeout={3000} />
       </form>
     )
   }

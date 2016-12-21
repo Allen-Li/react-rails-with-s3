@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as Service from './shared/service';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import Alert from 'react-s-alert';
 
 export default class Email extends Component {
   constructor(props) {
@@ -23,7 +24,9 @@ export default class Email extends Component {
 
   deleteSuccessfulCallback(result) {
     this.setState({emails_data: result.emails_data})
-    alert(result.message)
+    Alert.success(result.message, {
+      position: 'bottom'
+    });
   }
 
   downloadEmail(cell) {
@@ -35,7 +38,9 @@ export default class Email extends Component {
   }
 
   copyNdePath(cell, row) {
-    alert('Copy Successfully!')
+    Alert.success('Copy Successfully!', {
+      position: 'bottom'
+    });
   }
 
   editEmail(cell, row) {
@@ -86,20 +91,23 @@ export default class Email extends Component {
     }
 
     return (
-      <BootstrapTable data={this.state.emails_data} hover pagination options={options} striped={true}>
-        <TableHeaderColumn dataField="id" dataSort={true} isKey={true} width="60"> ID </TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataSort={true}
-          filter={{type: "TextFilter", placeholder: "Please enter a email name"}}>
-          Name</TableHeaderColumn>
-        <TableHeaderColumn dataField="template_name" dataSort={true} filter={{type: "TextFilter",
-          placeholder: "Please enter a template name"}} >Template Name</TableHeaderColumn>
-        <TableHeaderColumn dataField="created_at" dataSort={true} filter={{type: "DateFilter"}}
-          width="250" filterValue={this.dateFilter}>Created At</TableHeaderColumn>
-        <TableHeaderColumn dataField="updated_at" dataSort={true} filter={{type: "DateFilter"}}
-          width="250" filterValue={this.dateFilter}>Updated At</TableHeaderColumn>
-        <TableHeaderColumn columnClassName="list-action" width="420" dataFormat={this.rowActions}>
-          Actions</TableHeaderColumn>
-      </BootstrapTable>
+      <div>
+        <BootstrapTable data={this.state.emails_data} hover pagination options={options} striped={true}>
+          <TableHeaderColumn dataField="id" dataSort={true} isKey={true} width="60"> ID </TableHeaderColumn>
+          <TableHeaderColumn dataField="name" dataSort={true}
+            filter={{type: "TextFilter", placeholder: "Please enter a email name"}}>
+            Name</TableHeaderColumn>
+          <TableHeaderColumn dataField="template_name" dataSort={true} filter={{type: "TextFilter",
+            placeholder: "Please enter a template name"}} >Template Name</TableHeaderColumn>
+          <TableHeaderColumn dataField="created_at" dataSort={true} filter={{type: "DateFilter"}}
+            width="250" filterValue={this.dateFilter}>Created At</TableHeaderColumn>
+          <TableHeaderColumn dataField="updated_at" dataSort={true} filter={{type: "DateFilter"}}
+            width="250" filterValue={this.dateFilter}>Updated At</TableHeaderColumn>
+          <TableHeaderColumn columnClassName="list-action" width="420" dataFormat={this.rowActions}>
+            Actions</TableHeaderColumn>
+        </BootstrapTable>
+        <Alert stack={true} timeout={3000} />
+      </div>
     )
   }
 } 
