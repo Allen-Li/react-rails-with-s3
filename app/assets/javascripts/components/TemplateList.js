@@ -1,25 +1,42 @@
 import React, { Component, PropTypes } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as Service from './shared/service';
+import WarningDialog from './shared/WarningDialog'
 import Alert from 'react-s-alert';
 
 export default class UpsertTemplate extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      templates_data: this.props.templates_data
+      templates_data: this.props.templates_data,
+      show_delete_dialog: false
     }
 
     this.rowActions = this.rowActions.bind(this)
     this.sizePerPageDropDown = this.sizePerPageDropDown.bind(this)
     this.delete = this.delete.bind(this)
     this.successfulCallback = this.successfulCallback.bind(this)
+    this.showDeleteConfirm = this.showDeleteConfirm.bind(this)
   }
 
-  delete(cell, row) {
-    if (confirm(`Are you sure you want to delete this template`) == true) {
-      Service.destroy(`/templates/${cell.id}`, {}, this.successfulCallback)
-    }
+  delete() {
+    Service.destroy(`/templates/${this.state.cell_id}`, {}, this.successfulCallback)
+  }
+
+  deleteTemplateConfirm() {
+    let content = "Are you sure you want to delete this template?"
+    return(
+      <WarningDialog heading_title="Delete Template" content={content} 
+        cancelClick={this.hideDeleteConfirm} confirmClick={this.delete}/>
+    )
+  }
+
+  showDeleteConfirm(cell) {
+    this.setState({show_delete_dialog: true, cell_id: cell.id})
+  }
+
+  hideDeleteConfirm = () => {
+    this.setState({show_delete_dialog: false, cell_id: ''})
   }
 
   editTemplate(cell, row) {
@@ -48,7 +65,7 @@ export default class UpsertTemplate extends Component {
         <button type="button" className="btn btn-info" onClick={this.previewTemplate.bind(cell, row)}>Preview</button>
         <button type="button" className="btn btn-info" onClick={this.downloadTemplate.bind(cell, row)}>Download</button>
         <button type="button" className="btn btn-info" onClick={this.editTemplate.bind(cell, row)}>Edit</button>
-        <button type="button" className="btn btn-danger delete-template" onClick={this.delete.bind(cell, row)} >Delete</button>
+        <button type="button" className="btn btn-danger delete-template" onClick={this.showDeleteConfirm.bind(cell, row)} >Delete</button>
       </div>
     )
   }
@@ -97,6 +114,7 @@ export default class UpsertTemplate extends Component {
             Actions</TableHeaderColumn>
         </BootstrapTable>
         <Alert stack={true} timeout={3000} />
+        {this.state.show_delete_dialog ? this.deleteTemplateConfirm() : ''}
       </div>
     )
   }

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import * as Service from './shared/service';
+import WarningDialog from './shared/WarningDialog'
 import CopyToClipboard from 'react-copy-to-clipboard';
 import Alert from 'react-s-alert';
 
@@ -8,18 +9,34 @@ export default class Email extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      emails_data: this.props.emails_data
+      emails_data: this.props.emails_data,
+      show_delete_dialog: false
     }
 
     this.rowActions = this.rowActions.bind(this)
     this.deleteEmail = this.deleteEmail.bind(this)
     this.deleteSuccessfulCallback = this.deleteSuccessfulCallback.bind(this)
+    this.showDeleteConfirm = this.showDeleteConfirm.bind(this)
   }
 
-  deleteEmail(cell, row) {
-    if (confirm(`Are you sure you want to delete this email`) == true) {
-      Service.destroy(`/emails/${cell.id}`, {}, this.deleteSuccessfulCallback)
-    }
+  deleteEmail() {
+    Service.destroy(`/emails/${this.state.cell_id}`, {}, this.deleteSuccessfulCallback)
+  }
+
+  deleteEmailConfirm() {
+    let content = "Are you sure you want to delete this email?"
+    return(
+      <WarningDialog heading_title="Delete Email" content={content} 
+        cancelClick={this.hideDeleteConfirm} confirmClick={this.deleteEmail}/>
+    )
+  }
+
+  showDeleteConfirm(cell) {
+    this.setState({show_delete_dialog: true, cell_id: cell.id})
+  }
+
+  hideDeleteConfirm = () => {
+    this.setState({show_delete_dialog: false, cell_id: ''})
   }
 
   deleteSuccessfulCallback(result) {
@@ -58,7 +75,7 @@ export default class Email extends Component {
           <button type="button" className="btn btn-info">Copy Path</button>
         </CopyToClipboard>
         <button type="button" className="btn btn-info" onClick={this.editEmail.bind(cell, row)}>Edit</button>
-        <button type="button" className="btn btn-danger delete-email" onClick={this.deleteEmail.bind(cell, row)} >Delete</button>
+        <button type="button" className="btn btn-danger delete-email" onClick={this.showDeleteConfirm.bind(cell, row)} >Delete</button>
       </div>
     )
   }
@@ -107,6 +124,7 @@ export default class Email extends Component {
             Actions</TableHeaderColumn>
         </BootstrapTable>
         <Alert stack={true} timeout={3000} />
+        {this.state.show_delete_dialog ? this.deleteEmailConfirm() : ''}
       </div>
     )
   }
