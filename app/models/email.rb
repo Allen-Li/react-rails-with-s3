@@ -7,6 +7,7 @@ class Email < ApplicationRecord
   accepts_nested_attributes_for :images, allow_destroy: true
 
   serialize :tracking_pixels
+  serialize :moat_tags
 
   before_save :handle_name
   after_save :destroy_invalid_data
@@ -101,11 +102,15 @@ class Email < ApplicationRecord
   end
 
   def moat_tags_el
-    if moat_tags.include?('script')
-      moat_tags
-    else
-      "<script src=\"#{moat_tags}\"  type=\"text/javascript\"></script> \n"
-    end
+    moat_tags.map do |moat_tag|
+      unless moat_tag.blank?
+        if moat_tag.include?('script')
+          moat_tag
+        else
+          "<script src=\"#{moat_tag}\" type=\"text/javascript\"></script> \n"
+        end
+      end
+    end.join(' ')
   end
 
   def image_table_el

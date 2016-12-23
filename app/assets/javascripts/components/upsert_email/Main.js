@@ -8,7 +8,6 @@ import CodeMirror from 'react-codemirror'
 import Alert from 'react-s-alert';
 import PublishContainer from './PublishContainer';
 require('codemirror/mode/htmlembedded/htmlembedded')
-require('codemirror/mode/javascript/javascript')
 require('codemirror/addon/display/placeholder')
 
 export default class UpsertEmail extends Component {
@@ -21,7 +20,6 @@ export default class UpsertEmail extends Component {
     this.submit = this.submit.bind(this)
     this.renderEmailTypeBody = this.renderEmailTypeBody.bind(this)
     this.renderClientHtml = this.renderClientHtml.bind(this)
-    this.renderMoatTags = this.renderMoatTags.bind(this)
     this.renderEmailType = this.renderEmailType.bind(this)
     this.successfulCallback = this.successfulCallback.bind(this)
     this.updateSuccessfulCallback = this.updateSuccessfulCallback.bind(this)
@@ -32,7 +30,7 @@ export default class UpsertEmail extends Component {
       email_data: this.props.initial_data || {
         name: '',
         tracking_pixels: [''],
-        moat_tags: '',
+        moat_tags: [''],
         template_id: '',
         html: '',
         images_attributes: [],
@@ -202,12 +200,6 @@ export default class UpsertEmail extends Component {
     this.setState({ email_data: new_email_data, html_area_class: '' });
   }
 
-   handleMoatTagsChange(moat_tags) {
-    let new_email_data = Object.assign({}, this.state.email_data);
-    new_email_data.moat_tags = moat_tags;
-    this.setState({ email_data: new_email_data });
-  }
-
   setClientHtml = (e) => {
     let file = e.target.files[0]
     this.getFileContent(file)
@@ -222,17 +214,6 @@ export default class UpsertEmail extends Component {
     reader.onerror = (error) => {
       console.log('Error: ', error);
     }
-  }
-
-  renderMoatTags() {
-    var options = { lineWrapping: true, lineNumbers: true, mode: 'javascript' };
-    return (
-      <div className="form-group moat-tags-area">
-        <label className="control-label"> Moat Tags </label>
-        <CodeMirror ref="moat_tags" value={this.state.email_data.moat_tags || ''}
-          onChange={this.handleMoatTagsChange.bind(this)} options={options} />
-      </div>
-    )
   }
 
   renderClientHtml() {
@@ -352,15 +333,24 @@ export default class UpsertEmail extends Component {
   }
 
   renderDynamicAttribute() {
-    return(
-      <DynamicInputField
-        values={this.state.email_data['tracking_pixels']}
-        updateDynamicInputValue={this.updateDynamicInputValue.bind(this)}
-        deleteDynamicInputField={this.deleteDynamicInputField.bind(this)}
-        label={'Tracking Pixels'}
-        type={'tracking_pixels'}
-      />
-    )
+    var fields = [
+      ['tracking_pixels', 'Tracking Pixels'],
+      ['moat_tags', 'Moat Tags', 'CodeMirror']
+    ]
+
+    return fields.map((field, index) => {
+      return(
+        <DynamicInputField
+          key={index}
+          values={this.state.email_data[field[0]]}
+          updateDynamicInputValue={this.updateDynamicInputValue.bind(this)}
+          deleteDynamicInputField={this.deleteDynamicInputField.bind(this)}
+          label={field[1]}
+          type={field[0]}
+          input_type={field[2]}
+        />
+      )
+    })
   }
 
   renderEmailPreview() {
@@ -392,7 +382,6 @@ export default class UpsertEmail extends Component {
         </div>
 
         {this.renderDynamicAttribute()}
-        {this.renderMoatTags()}
 
         <div className="form-group">
           {this.renderEmailTypeBody()}

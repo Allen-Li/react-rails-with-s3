@@ -87,7 +87,7 @@ class EmailsController < ApplicationController
       :html,
       :template_id,
       :email_type,
-      :moat_tags,
+      moat_tags: [],
       tracking_pixels: [], 
       images_attributes: [:asset, :asset_file_name, :alt, :link, :id, :_destroy, :position, :width]
     )

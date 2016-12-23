@@ -18,14 +18,27 @@ div.email-list {
 
   .delete-dynamic-input-field {
     margin-left: 15px;
-    font-size: 15px;
+    font-size: 18px;
+  }
+
+  .moat-tags-area {
+    position: relative;
+    > .ReactCodeMirror {
+      width: 95%;
+      display: inline-block;
+    }
+
+    > .delete-dynamic-input-field {
+      position: absolute;
+      top: 25%;
+    }
   }
 }
 
 .upsert-email {
   .moat-tags-area {
     .ReactCodeMirror {
-      height: 102px;
+      height: 103px;
       > .CodeMirror {
         height: 100px;
       }
