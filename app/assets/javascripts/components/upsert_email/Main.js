@@ -6,6 +6,7 @@ import DynamicInputField from './DynamicInputField';
 import ImageContainer from './ImageContainer';
 import CodeMirror from 'react-codemirror'
 import Alert from 'react-s-alert';
+import PublishContainer from './PublishContainer';
 require('codemirror/mode/htmlembedded/htmlembedded')
 require('codemirror/mode/javascript/javascript')
 require('codemirror/addon/display/placeholder')
@@ -372,23 +373,6 @@ export default class UpsertEmail extends Component {
     )
   }
 
-  publish = () => {
-    let id = this.state.email_data.id
-    Alert.closeAll()
-    Service.put(`/emails/${id}/publish`, {}, this.publishSuccessfulCallback, this.failingCallback)
-  }
-
-  publishSuccessfulCallback() {
-    Alert.success('Published successfully!', {
-      position: 'top-right'
-    });
-  }
-
-  renderPublishButton() {
-    return this.state.email_data.id ? 
-      <button type="submit" className="email-publish btn btn-success" onClick={this.publish} >Publish</button> : ''
-  }
-
   render() {
     return (
       <form>
@@ -416,7 +400,7 @@ export default class UpsertEmail extends Component {
 
         <div className="form-group">
           <button type="submit" className="btn btn-primary" onClick={this.submit} >Submit</button>
-          {this.renderPublishButton()}
+          <PublishContainer email_id={this.state.email_data.id} email_data={this.state.email_data} failingCallback={this.failingCallback} />
         </div>
 
         {this.state.email_data.id ? this.renderEmailPreview() : ''}

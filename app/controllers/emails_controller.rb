@@ -48,8 +48,13 @@ class EmailsController < ApplicationController
   end
 
   def publish
-    Email.find(params[:id]).publish
-    redirect_to edit_email_path
+    begin
+      email = Email.find(params[:id])
+      email.publish
+      render json: { message: 'Published email successfully!', path: email.path }, status: 200
+    rescue Exception => e
+      render_error(e)
+    end
   end
 
   def information
