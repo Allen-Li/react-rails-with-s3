@@ -58,6 +58,7 @@ class EmailsController < ApplicationController
   end
 
   def information
+    @information = Information.fetch_data
   end
 
   private
